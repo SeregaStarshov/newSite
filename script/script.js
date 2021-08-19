@@ -19,9 +19,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
 			return { timeRemaining, days, hours, minutes, seconds };
 		}
-
+		// как по другому через setInterval сделать я незнаю
 		const timerId = setInterval(() => {
 			const timer = getTimeRemaining();
+
 			if (timer.timeRemaining <= 0) {
 				clearInterval(timerId);
 				timer.days = 0;
@@ -52,13 +53,10 @@ window.addEventListener('DOMContentLoaded', () => {
 			} else {
 				timerSeconds.textContent = timer.seconds;
 			}
-
-
-
 		});
 
 		//updateClock();
 	}
 
-	countTimer('20 august 2021 00:07');
+	countTimer('20 august 2021 00:59');
 });
