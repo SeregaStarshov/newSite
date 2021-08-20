@@ -19,16 +19,16 @@ getCurrentDay();
 
 
 function getCurrentTime() {
-
+	
 	const currentTime = currentDate.toLocaleTimeString('ru', { hour12: true });
-	const timeFormat = currentTime.substring(8);
+	const timeFormat = currentTime.substring(currentTime.length - 2);
 
 	let hours, minutes, seconds;
-
+	
 	if (currentDate.getHours() < 10) {
 		hours = `0${currentDate.getHours()}`;
 	} else {
-		currentDate.getHours();
+		hours = currentDate.getHours();
 	}
 
 	if (currentDate.getMinutes() < 10) {
@@ -54,9 +54,9 @@ function getCurrentTime() {
 				timesDay.textContent = 'Доброе утро';
 			}
 		} else if (timeFormat === 'PM') {
-			if (hours > 0 && hours <= 4) {
+			if (hours > 12 && hours <= 16) {
 				timesDay.textContent = 'Добрый день';
-			} else if (hours > 4) {
+			} else if (hours > 16) {
 				timesDay.textContent = 'Добрый вечер';
 			}
 		}
