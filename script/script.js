@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
 
 
-
+	//Таймер=========================================
 	function countTimer(deadline) {
 		const timerHours = document.getElementById('timer-hours');
 		const timerMinutes = document.getElementById('timer-minutes');
@@ -58,5 +58,57 @@ window.addEventListener('DOMContentLoaded', () => {
 		//updateClock();
 	}
 
-	countTimer('20 august 2021 00:59');
+	countTimer('25 august 2021 00:59');
+
+	//Меню================================
+
+	const toggleMenu = () => {
+
+		const btnMenu = document.querySelector('.menu');
+		const menu = document.querySelector('menu');
+		const closeBtn = document.querySelector('.close-btn');
+		const menuItems = menu.querySelectorAll('ul>li');
+
+		const handlerMenu = () => {
+			menu.classList.toggle('active-menu');
+		};
+		btnMenu.addEventListener('click', handlerMenu);
+
+		closeBtn.addEventListener('click', handlerMenu);
+		menuItems.forEach(elem => elem.addEventListener('click', handlerMenu));
+	};
+	toggleMenu();
+
+	//popup=========================================
+
+	const togglePopup = () => {
+		const popup = document.querySelector('.popup');
+		const popupBtn = document.querySelectorAll('.popup-btn');
+		const popupClose = document.querySelector('.popup-close');
+		const popupContent = popup.querySelector('.popup-content');
+
+		//анимация==========================================
+		popupBtn.forEach(elem => {
+			elem.addEventListener('click', () => {
+				let top = -400;
+				popup.style.display = 'block';
+				popupContent.style.cssText = `top: ${top}px;`;
+
+				const timerId = setInterval(() => {
+					top += 20;
+					popupContent.style.top = top + 'px';
+					if (popupContent.offsetTop > 58 || screen.width < 768) {
+						clearInterval(timerId);
+						popupContent.style.cssText = `top: 10%;`;
+					}
+				}, 4);
+
+			});
+		});
+
+		popupClose.addEventListener('click', () => {
+			popup.style.display = 'none';
+		});
+	};
+	togglePopup();
 });
