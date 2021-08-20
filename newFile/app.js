@@ -19,12 +19,12 @@ getCurrentDay();
 
 
 function getCurrentTime() {
-	
+
 	const currentTime = currentDate.toLocaleTimeString('ru', { hour12: true });
 	const timeFormat = currentTime.substring(currentTime.length - 2);
 
 	let hours, minutes, seconds;
-	
+
 	if (currentDate.getHours() < 10) {
 		hours = `0${currentDate.getHours()}`;
 	} else {
