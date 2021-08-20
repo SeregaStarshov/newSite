@@ -86,6 +86,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		const popupBtn = document.querySelectorAll('.popup-btn');
 		const popupClose = document.querySelector('.popup-close');
 		const popupContent = popup.querySelector('.popup-content');
+		const serviceBlock = document.querySelector('a[href="#service-block"]');
 
 		//анимация==========================================
 		popupBtn.forEach(elem => {
@@ -108,6 +109,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
 		popupClose.addEventListener('click', () => {
 			popup.style.display = 'none';
+		});
+
+		serviceBlock.addEventListener('click', event => {
+			event.preventDefault();
+			const timerId = setInterval(() => {
+				document.documentElement.scrollTop += 30;
+				if (document.documentElement.scrollTop > 830) {
+					clearInterval(timerId);
+				}
+			}, 2);
+
 		});
 	};
 	togglePopup();
