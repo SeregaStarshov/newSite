@@ -110,7 +110,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		popupClose.addEventListener('click', () => {
 			popup.style.display = 'none';
 		});
-
+		//плавность прокрутки===========================================
 		serviceBlock.addEventListener('click', event => {
 			event.preventDefault();
 			const timerId = setInterval(() => {
