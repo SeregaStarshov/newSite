@@ -64,18 +64,30 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	const toggleMenu = () => {
 
-		const btnMenu = document.querySelector('.menu');
-		const menu = document.querySelector('menu');
-		const closeBtn = document.querySelector('.close-btn');
-		const menuItems = menu.querySelectorAll('ul>li');
+		//const btnMenu = document.querySelector('.menu');//иконка
+		const menu = document.querySelector('menu');//всплывающее меню
+		// const closeBtn = document.querySelector('.close-btn');
+		// const menuItems = menu.querySelectorAll('ul>li');
 
 		const handlerMenu = () => {
 			menu.classList.toggle('active-menu');
 		};
-		btnMenu.addEventListener('click', handlerMenu);
 
-		closeBtn.addEventListener('click', handlerMenu);
-		menuItems.forEach(elem => elem.addEventListener('click', handlerMenu));
+		document.addEventListener('click', event => {
+
+			let target = event.target;
+			
+			if (target.closest('.menu')) {
+				handlerMenu();
+			} else if (target.closest('.close-btn')) {
+				event.preventDefault();
+				handlerMenu();
+			} else if (target.closest('menu>ul')) {
+				handlerMenu();
+			} else if (target !== target.closest('menu')) {
+				handlerMenu();
+			}
+		});
 	};
 	toggleMenu();
 
@@ -84,7 +96,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	const togglePopup = () => {
 		const popup = document.querySelector('.popup');
 		const popupBtn = document.querySelectorAll('.popup-btn');
-		const popupClose = document.querySelector('.popup-close');
+		//const popupClose = document.querySelector('.popup-close');
 		const popupContent = popup.querySelector('.popup-content');
 		const serviceBlock = document.querySelector('a[href="#service-block"]');
 
@@ -102,13 +114,24 @@ window.addEventListener('DOMContentLoaded', () => {
 						clearInterval(timerId);
 						popupContent.style.cssText = `top: 10%;`;
 					}
-				}, 4);
+				}, 10);
 
 			});
 		});
 
-		popupClose.addEventListener('click', () => {
-			popup.style.display = 'none';
+		popup.addEventListener('click', event => {
+			let target = event.target;
+
+			if (target.classList.contains('popup-close')) {
+				popup.style.display = 'none';
+			} else {
+				target = target.closest('.popup-content');
+
+				if (!target) {
+					popup.style.display = 'none';
+				}
+			}
+
 		});
 		//плавность прокрутки===========================================
 		serviceBlock.addEventListener('click', event => {
@@ -123,4 +146,38 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	};
 	togglePopup();
+
+	//tabs=============================================================
+
+	const tabs = () => {
+		const tabHeader = document.querySelector('.service-header');
+		const tab = document.querySelectorAll('.service-header-tab');
+		const tabContent = document.querySelectorAll('.service-tab');
+
+		const toggleTabContent = index => {
+			for (let i = 0; i < tabContent.length; i++) {
+				if (index === i) {
+					tab[i].classList.add('active');
+					tabContent[i].classList.remove('d-none');
+				} else {
+					tab[i].classList.remove('active');
+					tabContent[i].classList.add('d-none');
+				}
+			}
+		};
+
+		tabHeader.addEventListener('click', event => {
+			let target = event.target;
+			target = target.closest('.service-header-tab');
+			if (target) {
+				tab.forEach((item, i) => {
+
+					if (item === target) {
+						toggleTabContent(i);
+					}
+				});
+			}
+		});
+	};
+	tabs();
 });
