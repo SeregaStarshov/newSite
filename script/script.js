@@ -251,9 +251,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 			if (currentSlide >= slide.length) {
 				currentSlide = 0;
-			}
-
-			if (currentSlide < 0) {
+			} else if (currentSlide < 0) {
 				currentSlide = slide.length - 1;
 			}
 
