@@ -58,7 +58,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		//updateClock();
 	}
 
-	countTimer('25 august 2021 00:59');
+	countTimer('02 September 2021 00:59');
 
 	//Меню================================
 
@@ -274,4 +274,165 @@ window.addEventListener('DOMContentLoaded', () => {
 		startSlide(2000);
 	};
 	slider();
+
+	//dataAttributes=====================================
+	const commandPhoto = document.querySelectorAll('.command__photo');
+
+	commandPhoto.forEach(item => {
+		const attribute = item.src;
+		item.addEventListener('mouseover', event => {
+			event.target.src = event.target.dataset.img;
+		});
+
+		item.addEventListener('mouseout', event => {
+			event.target.src = attribute;
+		});
+	});
+
+	//поля ввода===========================================
+
+	const calcBlock = document.querySelector('.calc-block');
+	const calcInput = calcBlock.querySelectorAll('input');
+
+	calcBlock.addEventListener('input', event => {
+		const target = event.target;
+
+		calcInput.forEach(item => {
+			if (item === target) {
+				item.value = item.value.replace(/^0|\D/, '');
+			}
+		});
+	});
+	//валидация полей имя, сообщение============================
+	const inputNames = document.querySelectorAll('input[name="user_name"]');
+	console.log(inputNames);
+	const inputUserMessage = document.querySelector('input[name="user_message"]');
+	console.log(inputUserMessage);
+	const inputEmail = document.querySelectorAll('input[name="user_email"]');
+	console.log(inputEmail);
+	const inputPhone = document.querySelectorAll('input[name="user_phone"]');
+	console.log(inputPhone);
+	const formBtn = document.querySelectorAll('.form-btn[type="submit"]');
+	console.log(formBtn);
+
+	inputNames.forEach(item => {
+		item.addEventListener('blur', event => {
+			const target = event.target;
+			if (item === target) {
+				if (item.value.trim() === '') {
+					item.value = '';
+					return;
+				}
+
+				item.value = item.value.replace(/[^а-яё -]/gi, '').trim();
+				item.value = item.value.replace(/-(?![а-яё])|(?<![а-яё])-/ig, '');
+				item.value = item.value.replace(/\s+/g, ' ');
+				//item.value = item.value.replace(/(?<![а-яё])-/g, '');
+				item.value = item.value.replace(/(?<![а-яё])[а-яё]/ig, match => match.toUpperCase());
+				item.value = item.value.replace(/(?<=[А-Яа-яЁё])[а-яё]/ig, match => match.toLowerCase());
+			}
+		});
+	});
+
+	//message===========================================
+	inputUserMessage.addEventListener('input', () => {
+		//разве здесь не стоит разрешить еще ввод цифр?
+		inputUserMessage.value = inputUserMessage.value.replace(/\w+/ig, '');
+	});
+
+	//email=============================================
+	inputEmail.forEach(item => {
+		item.addEventListener('blur', event => {
+			const target = event.target;
+			if (target === item) {
+				if (item.value.trim() === '') {
+					item.value = '';
+					return;
+				}
+
+				item.value = item.value.replace(/[^-!'~@\.\*\w]/ig, '');
+			}
+		});
+	});
+	//phone================================================
+	inputPhone.forEach(item => {
+		item.addEventListener('blur', event => {
+			const target = event.target;
+			if (target === item) {
+				if (item.value.trim() === '') {
+					item.value = '';
+					return;
+				}
+
+				item.value = item.value.replace(/[^-\(\)\d]/ig, '');
+			}
+		});
+	});
+
+	//очистка форм после отправки==================================================
+	formBtn.forEach(item => {
+		item.addEventListener('click', event => {
+			if (event.target === item) {
+				const itemTarget = event.target.closest('form[name="user_form"]');
+				const itemCollection = itemTarget.elements;
+				for (let i = 0; i < itemCollection.length - 1; i++) {
+					itemCollection[i].value = '';
+				}
+			}
+		});
+	});
+
+	//калькулятор=======================================================
+	const calc = (price = 100) => {
+		const calcType = document.querySelector('.calc-type');
+		//const calcSquare = document.querySelector('.calc-square');
+		//const calcDay = document.querySelector('.calc-day'); вместо этих переменных взял уже созданную ранее calcInput
+		//const calcCount = document.querySelector('.calc-count');
+		const totalValue = document.getElementById('total');
+		calcType.value = '';
+		calcInput.forEach(item => item.value = '');
+
+		const countSum = () => {
+
+			let total = 0;
+			let countValue = 1;
+			let dayValue = 1;
+			const typeValue = calcType.options[calcType.selectedIndex].value;
+			const squareValue = +calcInput[0].value;
+
+			if (calcInput[1].value > 1) {
+				countValue += (calcInput[1].value - 1) / 10;
+			}
+
+			if (calcInput[2].value && calcInput[2].value < 5) {
+				dayValue *= 2;
+			} else if (calcInput[2].value && calcInput[2].value < 10) {
+				dayValue *= 1.5;
+			}
+
+			if (typeValue && squareValue) {
+				total = Math.ceil(price * typeValue * squareValue * countValue * dayValue);
+
+				let count = 0;
+				const timerId = setInterval(() => {
+					count += 10;
+					totalValue.textContent = count;
+					if (totalValue.textContent >= total) {
+						totalValue.textContent = total;
+						clearInterval(timerId);
+					}
+				}, 5);
+			}
+
+		};
+
+		calcBlock.addEventListener('change', event => {
+			const target = event.target;
+
+			if (target === calcType || calcInput) {
+				countSum();
+			}
+		});
+	};
+	calc(100);
 });
