@@ -324,12 +324,12 @@ window.addEventListener('DOMContentLoaded', () => {
 					return;
 				}
 
-				item.value = item.value.replace(/[^а-яё -]/gi, '').trim();
-				item.value = item.value.replace(/-(?![а-яё])|(?<![а-яё])-/ig, '');
-				item.value = item.value.replace(/\s+/g, ' ');
+				item.value = item.value.replace(/[^а-яё -]/gi, '').trim()
+					.replace(/-(?![а-яё])|(?<![а-яё])-/ig, '')
+					.replace(/\s+/g, ' ')
 				//item.value = item.value.replace(/(?<![а-яё])-/g, '');
-				item.value = item.value.replace(/(?<![а-яё])[а-яё]/ig, match => match.toUpperCase());
-				item.value = item.value.replace(/(?<=[А-Яа-яЁё])[а-яё]/ig, match => match.toLowerCase());
+					.replace(/(?<![а-яё])[а-яё]/ig, match => match.toUpperCase())
+					.replace(/(?<=[А-Яа-яЁё])[а-яё]/ig, match => match.toLowerCase());
 			}
 		});
 	});
@@ -338,6 +338,13 @@ window.addEventListener('DOMContentLoaded', () => {
 	inputUserMessage.addEventListener('input', () => {
 		//разве здесь не стоит разрешить еще ввод цифр?
 		inputUserMessage.value = inputUserMessage.value.replace(/\w+/ig, '');
+	});
+
+	inputUserMessage.addEventListener('blur', () => {
+		inputUserMessage.value = inputUserMessage.value.replace(/-(?![а-яё])|(?<![а-яё])-/ig, '').trim()
+			.replace(/\s+/g, ' ')
+			.replace(/(?<=[а-яё])\./gi, '. ')
+			.replace(/^[^а-яё]+/g, '');
 	});
 
 	//email=============================================
