@@ -305,15 +305,19 @@ window.addEventListener('DOMContentLoaded', () => {
 	});
 	//валидация полей имя, сообщение============================
 	const inputNames = document.querySelectorAll('input[name="user_name"]');
-	console.log(inputNames);
 	const inputUserMessage = document.querySelector('input[name="user_message"]');
-	console.log(inputUserMessage);
 	const inputEmail = document.querySelectorAll('input[name="user_email"]');
-	console.log(inputEmail);
 	const inputPhone = document.querySelectorAll('input[name="user_phone"]');
-	console.log(inputPhone);
 	const formBtn = document.querySelectorAll('.form-btn[type="submit"]');
-	console.log(formBtn);
+	const form2 = document.getElementById('form2');
+	console.log(form2);
+
+	// form2.addEventListener('keydown', event => {
+	// 	if (event.keyCode === 13) {
+	// 		event.preventDefault();
+	// 		//event.target.value = event.target.value.replace(/.(?!.)/gi, match => match + '\n');
+	// 	}
+	// });
 
 	inputNames.forEach(item => {
 		item.addEventListener('blur', event => {
