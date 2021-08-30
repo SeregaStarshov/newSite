@@ -415,7 +415,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
 				let count = 0;
 				const timerId = setInterval(() => {
-					count += 10;
+					if (total <= 1000) {
+						count += 25;
+					} else if (total > 1000 && total < 2500) {
+						count += 35;
+					} else if (total > 2500) {
+						count += 55;
+					}
+					
 					totalValue.textContent = count;
 					if (totalValue.textContent >= total) {
 						totalValue.textContent = total;
