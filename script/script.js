@@ -309,15 +309,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	const inputEmail = document.querySelectorAll('input[name="user_email"]');
 	const inputPhone = document.querySelectorAll('input[name="user_phone"]');
 	const formBtn = document.querySelectorAll('.form-btn[type="submit"]');
-	const form2 = document.getElementById('form2');
-	console.log(form2);
 
-	// form2.addEventListener('keydown', event => {
-	// 	if (event.keyCode === 13) {
-	// 		event.preventDefault();
-	// 		//event.target.value = event.target.value.replace(/.(?!.)/gi, match => match + '\n');
-	// 	}
-	// });
 
 	inputNames.forEach(item => {
 		item.addEventListener('blur', event => {
@@ -345,7 +337,8 @@ window.addEventListener('DOMContentLoaded', () => {
 	});
 
 	inputUserMessage.addEventListener('blur', () => {
-		inputUserMessage.value = inputUserMessage.value.replace(/-(?![а-яё])|(?<![а-яё])-/ig, '').trim()
+		inputUserMessage.value = inputUserMessage.value.replace(/-(?=-)(?<=-)-/ig, '-').trim()
+			.replace(/-(?![а-яё])|(?<![а-яё])-/ig, '')
 			.replace(/\s+/g, ' ')
 			.replace(/(?<=[а-яё])\./gi, '. ')
 			.replace(/^[^а-яё]+/g, '');
