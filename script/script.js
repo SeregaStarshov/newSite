@@ -420,9 +420,9 @@ window.addEventListener('DOMContentLoaded', () => {
 					} else if (total > 1000 && total < 2500) {
 						count += 35;
 					} else if (total > 2500) {
-						count += 55;
+						count += 65;
 					}
-					
+
 					totalValue.textContent = count;
 					if (totalValue.textContent >= total) {
 						totalValue.textContent = total;
