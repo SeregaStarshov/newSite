@@ -305,18 +305,15 @@ window.addEventListener('DOMContentLoaded', () => {
 	});
 	//валидация полей имя, сообщение============================
 	const inputNames = document.querySelectorAll('input[name="user_name"]');
-	console.log(inputNames);
 	const inputUserMessage = document.querySelector('input[name="user_message"]');
-	console.log(inputUserMessage);
 	const inputEmail = document.querySelectorAll('input[name="user_email"]');
-	console.log(inputEmail);
 	const inputPhone = document.querySelectorAll('input[name="user_phone"]');
-	console.log(inputPhone);
-	const formBtn = document.querySelectorAll('.form-btn[type="submit"]');
-	console.log(formBtn);
+	// const formBtn = document.querySelectorAll('.form-btn[type="submit"]');
+	// console.log(formBtn);
 
 	inputNames.forEach(item => {
-		item.addEventListener('blur', event => {
+
+		item.addEventListener('input', event => {
 			const target = event.target;
 			if (item === target) {
 				if (item.value.trim() === '') {
@@ -324,20 +321,30 @@ window.addEventListener('DOMContentLoaded', () => {
 					return;
 				}
 
-				item.value = item.value.replace(/[^а-яё -]/gi, '').trim();
-				item.value = item.value.replace(/-(?![а-яё])|(?<![а-яё])-/ig, '');
-				item.value = item.value.replace(/\s+/g, ' ');
-				//item.value = item.value.replace(/(?<![а-яё])-/g, '');
-				item.value = item.value.replace(/(?<![а-яё])[а-яё]/ig, match => match.toUpperCase());
-				item.value = item.value.replace(/(?<=[А-Яа-яЁё])[а-яё]/ig, match => match.toLowerCase());
+				item.value = item.value.replace(/[^а-яё ]/gi, '')
+				//item.value = item.value.replace(/-(?![а-яё])|(?<![а-яё])-/ig, '')
+					.replace(/\s+/g, ' ')
+					.replace(/(?<![а-яё])[а-яё]/ig, match => match.toUpperCase())
+					.replace(/(?<=[А-Яа-яЁё])[а-яё]/ig, match => match.toLowerCase());
 			}
+		});
+
+		item.addEventListener('blur', () => {
+			item.value = item.value.trim();
 		});
 	});
 
 	//message===========================================
 	inputUserMessage.addEventListener('input', () => {
-		//разве здесь не стоит разрешить еще ввод цифр?
-		inputUserMessage.value = inputUserMessage.value.replace(/\w+/ig, '');
+		inputUserMessage.value = inputUserMessage.value.replace(/[^а-яё\W\d ]/ig, '');
+	});
+
+	inputUserMessage.addEventListener('blur', () => {
+		inputUserMessage.value = inputUserMessage.value.replace(/-{2,}/ig, '-').trim()
+			.replace(/-(?![а-яё\d])|(?<![а-яё\d])-/ig, '')
+			.replace(/\s+/g, ' ')
+			.replace(/(?<=[а-яё])\./gi, '. ')
+			.replace(/^[^а-яё]+/g, '');
 	});
 
 	//email=============================================
@@ -364,23 +371,12 @@ window.addEventListener('DOMContentLoaded', () => {
 					return;
 				}
 
-				item.value = item.value.replace(/[^-\(\)\d]/ig, '');
+				item.value = item.value.replace(/[^\+\d]/ig, '');
 			}
 		});
 	});
 
-	//очистка форм после отправки==================================================
-	formBtn.forEach(item => {
-		item.addEventListener('click', event => {
-			if (event.target === item) {
-				const itemTarget = event.target.closest('form[name="user_form"]');
-				const itemCollection = itemTarget.elements;
-				for (let i = 0; i < itemCollection.length - 1; i++) {
-					itemCollection[i].value = '';
-				}
-			}
-		});
-	});
+
 
 	//калькулятор=======================================================
 	const calc = (price = 100) => {
@@ -442,4 +438,89 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	};
 	calc(100);
+
+	//send-ajax-form=======================================
+	const forms = document.querySelectorAll('form');
+	const sendForm = () => {
+		const errorMessage = 'Что то пошло не так...';
+		const loadMessage = 'Загрузка...';
+		const successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
+
+		const statusMessage = document.createElement('div');
+		statusMessage.style.cssText = 'font-size: 2rem; color: white';
+
+		forms.forEach(item => {
+			item.addEventListener('submit', event => {
+				event.preventDefault();
+				item.appendChild(statusMessage);
+				statusMessage.textContent = loadMessage;
+				const formData = new FormData(item);
+				const body = {};
+				formData.forEach((val, key) => {
+					body[key] = val;
+				});
+				postData(body, () => {
+					statusMessage.textContent = successMessage;
+				}, error => {
+					statusMessage.textContent = errorMessage;
+					console.error(error);
+				});
+			});
+		});
+
+		// form.addEventListener('submit', event => {
+		// 	event.preventDefault();
+		// 	form.appendChild(statusMessage);
+		// 	statusMessage.textContent = loadMessage;
+		// 	const formData = new FormData(form);
+		// 	console.log(formData)
+		// 	const body = {};
+		// 	formData.forEach((val, key) => {
+		// 		console.log(val, key)
+		// 		body[key] = val;
+		// 	});
+		// 	postData(body, () => {
+		// 		statusMessage.textContent = successMessage;
+		// 	}, error => {
+		// 		statusMessage.textContent = errorMessage;
+		// 		console.error(error);
+		// 	});
+		// });
+
+
+		function postData(body, outputData, errorData) {
+			const request = new XMLHttpRequest();
+
+			request.addEventListener('readystatechange', () => {
+
+				if (request.readyState !== 4) {
+					return;
+				}
+
+				if (request.status === 200) {
+					outputData();
+				} else {
+					errorData(request.status);
+				}
+
+			});
+
+			request.open('POST', 'server.php');
+			request.setRequestHeader('Content-Type', 'application/json');
+			request.send(JSON.stringify(body));
+		}
+	};
+	sendForm();
+
+	//очистка форм после отправки==================================================
+	forms.forEach(item => {
+		item.addEventListener('submit', event => {
+			if (event.target === item) {
+				const itemCollection = item.elements;
+				for (let i = 0; i < itemCollection.length - 1; i++) {
+					itemCollection[i].value = '';
+				}
+			}
+		});
+	});
 });
