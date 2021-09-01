@@ -445,6 +445,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		const errorMessage = 'Что то пошло не так...';
 		const loadMessage = 'Загрузка...';
 		const successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
+		let status;
 
 		const statusMessage = document.createElement('div');
 		statusMessage.style.cssText = 'font-size: 2rem; color: white';
@@ -453,7 +454,8 @@ window.addEventListener('DOMContentLoaded', () => {
 			item.addEventListener('submit', event => {
 				event.preventDefault();
 				item.appendChild(statusMessage);
-				statusMessage.textContent = loadMessage;
+				//statusMessage.textContent = loadMessage;
+				statusMessage.textContent = showPreloader();
 				const formData = new FormData(item);
 				const body = {};
 				formData.forEach((val, key) => {
@@ -467,6 +469,21 @@ window.addEventListener('DOMContentLoaded', () => {
 				});
 			});
 		});
+
+		function showPreloader() {
+			let i = 0;
+			const timerId = setInterval(() => {
+				if (i < loadMessage.length && status !== 200) {
+					statusMessage.textContent += loadMessage[i++];
+				} else if (i === loadMessage.length && status !== 200) {
+					i = 0;
+					statusMessage.textContent = '';
+					statusMessage.textContent += loadMessage[i++];
+				} else if (status === 200) {
+					clearInterval(timerId);
+				}
+			}, 150);
+		}
 
 		// form.addEventListener('submit', event => {
 		// 	event.preventDefault();
@@ -498,12 +515,14 @@ window.addEventListener('DOMContentLoaded', () => {
 				}
 
 				if (request.status === 200) {
+					status = request.status;
 					outputData();
 				} else {
 					errorData(request.status);
 				}
 
 			});
+
 
 			request.open('POST', 'server.php');
 			request.setRequestHeader('Content-Type', 'application/json');
