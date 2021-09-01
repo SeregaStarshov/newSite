@@ -482,7 +482,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				} else if (status === 200) {
 					clearInterval(timerId);
 				}
-			}, 150);
+			}, 90);
 		}
 
 		// form.addEventListener('submit', event => {
