@@ -336,7 +336,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	//message===========================================
 	inputUserMessage.addEventListener('input', () => {
-		inputUserMessage.value = inputUserMessage.value.replace(/[^а-яё\W\d ]/ig, '');
+		inputUserMessage.value = inputUserMessage.value.replace(/[^а-яё0-9!?\., -]/ig, '');
 	});
 
 	inputUserMessage.addEventListener('blur', () => {
@@ -363,7 +363,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	});
 	//phone================================================
 	inputPhone.forEach(item => {
-		item.addEventListener('blur', event => {
+		item.addEventListener('input', event => {
 			const target = event.target;
 			if (target === item) {
 				if (item.value.trim() === '') {
@@ -371,7 +371,7 @@ window.addEventListener('DOMContentLoaded', () => {
 					return;
 				}
 
-				item.value = item.value.replace(/[^\+\d]/ig, '');
+				item.value = item.value.replace(/[^0-9\+]/ig, '');
 			}
 		});
 	});
