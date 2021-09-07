@@ -1,4 +1,5 @@
 const forms = document.querySelectorAll('form');
+
 const sendForm = () => {
 	const errorMessage = 'Что то пошло не так...';
 	const loadMessage = 'Загрузка...';
@@ -38,6 +39,17 @@ const sendForm = () => {
 					console.error(error);
 				});
 		});
+
+		//очистка форм после отправки==================================================
+		item.addEventListener('submit', event => {
+			if (event.target === item) {
+				const itemCollection = item.elements;
+				for (let i = 0; i < itemCollection.length - 1; i++) {
+					itemCollection[i].value = '';
+				}
+			}
+		});
+
 	});
 
 	const postData = body => fetch('./server.php', {
@@ -64,17 +76,5 @@ const sendForm = () => {
 		}, 90);
 	}
 };
-
-//очистка форм после отправки==================================================
-forms.forEach(item => {
-	item.addEventListener('submit', event => {
-		if (event.target === item) {
-			const itemCollection = item.elements;
-			for (let i = 0; i < itemCollection.length - 1; i++) {
-				itemCollection[i].value = '';
-			}
-		}
-	});
-});
 
 export default sendForm;

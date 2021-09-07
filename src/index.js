@@ -34,4 +34,3 @@ calc(100);
 
 //send-ajax-form=======================================
 sendForm();
-console.log(55)
