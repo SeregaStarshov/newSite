@@ -30,11 +30,13 @@ const calc = (price = 100) => {
 			let count = 0;
 			const timerId = setInterval(() => {
 				if (total <= 1000) {
-					count += 25;
-				} else if (total > 1000 && total < 2500) {
 					count += 35;
-				} else if (total > 2500) {
-					count += 65;
+				} else if (total > 1000 && total < 5500) {
+					count += 60;
+				} else if (total > 5500 && total < 10000) {
+					count += 320;
+				} else if (total > 10000) {
+					count += 550;
 				}
 
 				totalValue.textContent = count;
