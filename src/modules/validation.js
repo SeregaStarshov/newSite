@@ -81,6 +81,16 @@ const validation = () => {
 				item.value = item.value.replace(/[^0-9\+]/ig, '');
 			}
 		});
+
+		item.addEventListener('blur', event => {
+			const target = event.target;
+			if (target === item) {
+				//item.value = item.value.replace(/.{9}/ig, '');
+				if (item.value.length < 9 || item.value.length > 16) {
+					item.value = '';
+				}
+			}
+		});
 	});
 };
 
