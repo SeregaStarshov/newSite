@@ -38,10 +38,7 @@ const sendForm = () => {
 					statusMessage.textContent = errorMessage;
 					console.error(error);
 				});
-		});
-
-		//очистка форм после отправки==================================================
-		item.addEventListener('submit', event => {
+			//очистка форм после отправки==================================================
 			if (event.target === item) {
 				const itemCollection = item.elements;
 				for (let i = 0; i < itemCollection.length - 1; i++) {
