@@ -10,7 +10,7 @@ import calc from './modules/calc';
 import sendForm from './modules/sendForm';
 
 //Таймер=========================================
-countTimer('12 September 2021 00:59');
+countTimer('12 September 2022 00:59');
 
 //Меню================================
 toggleMenu();
